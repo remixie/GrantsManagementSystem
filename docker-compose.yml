@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  gms:
+    container_name: vue-cli
+    restart: always
+    command: vue ui --host 0.0.0.0 --port 8000
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    ports:
+      - "80:80"
+      - "8000:8000"
+      - "8080:8080"
+
+    volumes:
+      - ".:/usr/src"
+      - "/usr/src/node_modules"
+
+  db:
+    container_name: db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: MYSQL_DATABASE
+      MYSQL_USER: MYSQL_USER
+      MYSQL_PASSWORD: MYSQL_PASSWORD
+    ports:
+      - "9906:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8081:80"
+    restart: always
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
