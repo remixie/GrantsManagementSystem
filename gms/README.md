@@ -1,24 +1,5 @@
-# gms-app
+# Grants Management System (GMS)
 
-## Project setup
-```
-npm install
-```
+Troubleshooting:
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- if the MySQL connection is failing, make sure that personman has Standard Authentication Type on MySQL Workbench and Administrative Roles is set to DB Manager

@@ -12,10 +12,12 @@ services:
       - "80:80"
       - "8000:8000"
       - "8080:8080"
-
+      - "3000:3000"
     volumes:
       - ".:/usr/src"
       - "/usr/src/node_modules"
+    depends_on:
+      - db
 
   db:
     platform: linux/x86_64
@@ -28,7 +30,7 @@ services:
       MYSQL_USER: MYSQL_USER
       MYSQL_PASSWORD: MYSQL_PASSWORD
     ports:
-      - "9906:3306"
+      - "3306:3306"
     volumes:
       - ./mysql:/var/lib/mysql
 
