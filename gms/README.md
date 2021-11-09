@@ -1,4 +1,4 @@
-# grantsmanagementsystem
+# gms-app
 
 ## Project setup
 ```
