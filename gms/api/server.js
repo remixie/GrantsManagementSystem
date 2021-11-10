@@ -1,13 +1,22 @@
 const express = require("express");
 const app = express();
+var cors = require("cors");
 const http = require("http").Server(app);
-const io = require("socket.io")(http);
+//const io = require("socket.io")(http);
 const mysql = require("mysql");
 var port = process.env.PORT || 3000;
 
 http.listen(port, () => console.log("Listening to port " + port + "."));
 
 app.use(express.urlencoded({ extended: true }));
+const allowCrossDomain = function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
+};
+
+app.use(allowCrossDomain);
 
 var db = mysql.createConnection({
   host: "db",

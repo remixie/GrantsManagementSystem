@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "start-server": "node api/server.js",
+    "start-server": "nodemon api/server.js --legacy-watch",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

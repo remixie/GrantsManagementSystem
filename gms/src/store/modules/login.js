@@ -1,43 +1,41 @@
 import axios from "axios";
-import { router } from "../../router/index.js";
+//import { router } from "../../router/index.js";
 
-//Comment for you (plz delete after reading) -  All the state variables need to be reset on logout
 const state = {
-  isLogin: false,
-  token: null,
-  user: null, //Comment for you (plz delete after reading) - this field can be used if required otherwise can be eliminated as well.
+  server_answer: "mismatch",
 };
 
-const getters = {};
-
-const actions = {
-  async doLogin({ commit }, { username, password }) {
-    const req = {
-      email: username,
-      password: password,
-    };
-
-    console.log(req);
-    const loginResponse = await axios.post("https://reqres.in/api/login", req);
-
-    console.log(loginResponse.data);
-
-    if (loginResponse.data.error) {
-      console.log("Password is missing");
-    } else if (loginResponse.data.token) {
-      console.log("Login Successful");
-      commit("loginSuccess", loginResponse, username);
-
-      router.push("/admin");
-    }
+const getters = {
+  answer: (state) => {
+    return state.server_answer;
   },
 };
 
 const mutations = {
-  loginSuccess(state, token, username) {
-    state.isLogin = true;
-    state.token = token;
-    state.user = username;
+  setStatus(state, payload) {
+    state.server_answer = payload.data;
+  },
+};
+
+const actions = {
+  async doLogin({ commit }, payload) {
+    //alert("hello!");
+    const config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+    let params = new URLSearchParams();
+    params.append("username", payload.username);
+    params.append("password", payload.password);
+
+    let response = await axios.post(
+      "http://localhost:3000/check-login",
+      params,
+      config
+    );
+
+    commit("setStatus", response);
   },
 };
 
