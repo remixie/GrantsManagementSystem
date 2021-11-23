@@ -3,6 +3,9 @@
     <div class="container">
       <Login v-if="answer == 'mismatch'" />
       <Admin v-if="answer == 'success'" />
+      <DeptChair v-if="answer == 'success'" />
+      <FacultyResearcher v-if="answer == 'success'" />
+      <SparWorker v-if="answer == 'success'" />
     </div>
   </div>
 </template>
@@ -10,6 +13,9 @@
 <script>
 import Login from "../components/Login.vue";
 import Admin from "../components/Admin.vue";
+import DeptChair from "../components/DeptChair.vue";
+import FacultyResearcher from "../components/FacultyResearcher.vue";
+import SparWorker from "../components/SparWorker.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -17,6 +23,9 @@ export default {
   components: {
     Login,
     Admin,
+    DeptChair,
+    FacultyResearcher,
+    SparWorker
   },
   computed: {
     ...mapGetters(["answer"]),

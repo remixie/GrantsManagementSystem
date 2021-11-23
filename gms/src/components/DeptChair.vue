@@ -6,14 +6,14 @@
         <router-link to="/about">About</router-link> |
         <a href="#" v-on:click="logout()">Logout</a>
       </div>
-      <h2>SPAR Admin Homepage</h2>
+      <h2>Department Chair Homepage</h2>
     </div>
 
     <div class="container">
-      <div id="admin" class="vertical-menu">
-        <router-link to="/addNewProfile">Add a new Profile</router-link>
-        <router-link to="/updateProfile">Update Profile</router-link>
-        <router-link to="/deleteProfile">Delete Profile</router-link>
+      <div class="vertical-menu">
+        <router-link to="/listDeptFaculties">List All Faculties</router-link>
+        <router-link to="/totalFundingFaculty">View Total Grant Funding for a Faculty</router-link>
+        <router-link to="/totalFundingDept">View Total Grant Funding for the Department</router-link>
       </div>
     </div>
   </div>
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: "Admin",
+  name: "DeptChairs",
   methods: {
     logout() {
       this.$store.dispatch("doLogin", {
@@ -42,10 +42,6 @@ h2 {
 .container {
   width: 400px;
   display: block;
-}
-
-#admin{
-  width:200px;
 }
 </style>
 

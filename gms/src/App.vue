@@ -9,7 +9,7 @@
 import Header from './components/layout/Header'
 
   export default {
-    name: "apps",
+    name: "app",
     components: {
       Header,
     }
@@ -59,12 +59,12 @@ import Header from './components/layout/Header'
 
   /* css for Menus on all home pages */
   .vertical-menu {
-    width: 200px;
+    width: 350px;
     display: inline-block;
   }
 
   .vertical-menu a {
-    background-color: #eee;
+    background-color:#18d38e;
     color: black;
     display: block;
     padding: 12px;
@@ -111,7 +111,7 @@ import Header from './components/layout/Header'
 
   /* css for all labels */
   label{
-        padding: 12px 20px;
+       /* padding: 12px 20px; */
         margin: 8px 0;
         font-size: 16px;
   }
