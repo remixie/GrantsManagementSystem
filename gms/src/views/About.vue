@@ -3,9 +3,7 @@
     <div class="header">
       <div id="nav">
         <router-link to="/">Home</router-link> |
-        <!-- Comment for you (plz delete after reading) - Here routing needs to be added based on whether About was clicked from Login Page or user's homepage. Home button should redirect accordingly.-->
-        <router-link to="/about">About</router-link> |
-        <router-link to="/">Logout</router-link>
+        <router-link to="/about">About</router-link> 
       </div>
       <h2>About SPAR GMS</h2>
     </div>

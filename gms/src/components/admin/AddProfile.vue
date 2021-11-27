@@ -3,8 +3,7 @@
     <div class="header">
       <div id="nav">
         <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link> |
-        <router-link to="/">Logout</router-link>
+        <router-link to="/about">About</router-link>
       </div>
       <h2>Add a new profile</h2>
     </div>
@@ -76,7 +75,7 @@ export default {
   }),
    methods: {
   submit() {
-      if (this.username && this.password) {
+      if (this.username && this.password && this.roleid.length > 0) {
         this.$store.dispatch("profiles", {
           username: this.username,
           password: this.password,
@@ -85,7 +84,7 @@ export default {
         });
         this.$router.push('/');
       } else {
-        alert("Please enter username and password");
+        alert("Please fill out all fields.");
       }
     },
    }

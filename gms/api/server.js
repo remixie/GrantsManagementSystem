@@ -48,7 +48,7 @@ app.post("/check-login", (req, res) => {
         }
       );
     } else {
-      res.send("mismatch");
+      res.send({roleID: "mismatch",deptID: ""});
     }
   });
 });
@@ -57,7 +57,7 @@ app.post("/profiles",(req,res) => {
   let operation = req.body.operation;
 
   if(operation == "get"){
-    let sql = `Select username from Users`;
+    let sql = `Select username from Users where userID <> 1`;
     db.query(sql, (err, result) => {
       if (err) {
         throw err;
@@ -149,6 +149,19 @@ app.post("/chair",(req,res) => {
       }
       
     });
+    }
+
+    if(operation == 'allFunding'){
+      let deptID = req.body.deptID;
+      let sql = `select sum(a.initialAmount) as total, d.departmentName  from Accounts a join Projects p join Faculty f join Departments d on d.deptID = f.deptID and p.accountID = a.accountID and f.facultyID = p.facultyID and f.deptID = ?`
+      db.query(sql,[deptID], (err, result) => {
+        if (err) {
+          throw err;
+        }
+        if(result.length > 0) {
+          res.send(Object.values(JSON.parse(JSON.stringify(result)))[0])
+        }
+      });
     }
 
     if(operation == 'totalFacultyFunds'){

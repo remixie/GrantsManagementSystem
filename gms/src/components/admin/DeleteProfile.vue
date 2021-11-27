@@ -3,8 +3,7 @@
         <div class="header">
             <div id="nav">
                 <router-link to="/">Home</router-link> |
-                <router-link to="/about">About</router-link> |
-                <router-link to="/">Logout</router-link>
+                <router-link to="/about">About</router-link> 
             </div>
             <h2>Delete a profile</h2>
         </div>

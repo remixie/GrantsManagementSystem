@@ -35,14 +35,15 @@ const actions = {
     params.append("username", payload.username);
     params.append("password", payload.password);
 
-    let response = await axios.post(
+    await axios.post(
       "http://localhost:3000/check-login",
       params,
       config
-    );
-
-    commit("setStatus", response.data.roleID);
+    ).then(response => {
+      commit("setStatus", response.data.roleID);
     commit("setDept",response.data.deptID);
+    });
+    
   },
 };
 

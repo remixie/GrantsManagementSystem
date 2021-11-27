@@ -3,49 +3,47 @@
         <div class="header">
             <div id="nav">
                 <router-link to="/">Home</router-link> |
-                <router-link to="/about">About</router-link> |
-                <router-link to="/">Logout</router-link>
+                <router-link to="/about">About</router-link> 
             </div>
-            <h2>View Total Grant Funding for a Department</h2>
+            <h2>View Total Department Grant Funding</h2>
         </div>
         <div class="centered">
             <table>
-                <tr>
-                <td colspan=2>
-                    <p>Please select a department to view total amount of grant funding for that department </p>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                    <label for="deptName"><b>Department</b></label>
-                </td>
-                <td>
-                    <select name="deptName" id="deptName" class="dropdown">
-                    <option disabled selected value> -- Select Department -- </option>
-                    <option value="a">A</option>
-                    <option value="b">B</option>
-                    <option value="c">C</option>
-                    <option value="d">D</option>
-                    </select>
-                </td>
-                </tr>
-                <tr/> <tr/> <tr/>
-                <tr>
-                <td colspan=2 style="padding-left:30%;">
-                    <button type="submit">View Funding</button>
-                </td>
-                </tr>
+                <tr><td>The Total Grant Funding for the {{details.departmentName}} Department is ${{details.total}}</td></tr>
             </table>
-
-            <!-- Element to display department funding goes here -->
-
         </div>
     </div>
 </template>
 
 <script>
+import axios from "axios";
+import { mapGetters } from 'vuex'
 export default {
     name: "TotalDeptFunds",
+    data: () => ({
+    details: "",
+  }),
+  computed: {
+  ...mapGetters({
+deptID: "getDept",
+  })},
+    async mounted(){
+        const config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      }
+}
+let params = new URLSearchParams();
+    params.append("operation", "allFunding");
+    params.append("deptID", this.deptID);
+      await axios.post(
+      "http://localhost:3000/chair",
+      params,
+      config
+    ).then(result => {
+        this.details = result.data;
+    });
+}
 }
 </script>
 

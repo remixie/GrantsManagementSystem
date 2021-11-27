@@ -13,7 +13,7 @@
       <div class="vertical-menu">
         <router-link to="/listDeptFaculties">List All Faculty with Active Projects</router-link>
         <router-link to="/totalFundingFaculty">View Total Grant Funding for a Faculty</router-link>
-        <router-link to="/totalFundingDept">View Total Grant Funding for the Department</router-link>
+        <router-link to="/totalFundingDept">View Department Total Grant Funding</router-link>
       </div>
     </div>
   </div>

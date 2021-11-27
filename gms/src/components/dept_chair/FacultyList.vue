@@ -3,21 +3,20 @@
         <div class="header">
             <div id="nav">
                 <router-link to="/">Home</router-link> |
-                <router-link to="/about">About</router-link> |
-                <router-link to="/">Logout</router-link>
+                <router-link to="/about">About</router-link> 
             </div>
-            <h2>List all faculties</h2>
+            <h2>List all Faculty with Active Projects</h2>
         </div>
         <div class="centered">
             <table>
                 <tr>
                 <td colspan=2>
-                    <p>View list of all faculties in the department with current(active) grant-funded projects</p>
+                    <p>View list of all Faculty in this Department with current(active) grant-funded projects</p>
                 </td>
                 </tr>
             </table>
             <table>
-                <tr v-for="faculty in activeFaculty" :key="faculty"><td>{{faculty.firstName}} {{faculty.lastName}} is working on {{faculty.projectTitle}}</td></tr>
+                <tr v-for="faculty in activeFaculty" :key="faculty"><td>{{faculty.firstName}} {{faculty.lastName}} is working on the project {{faculty.projectTitle}}</td></tr>
             </table>
         </div>
     </div>
