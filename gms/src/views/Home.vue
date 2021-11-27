@@ -2,10 +2,10 @@
   <div id="app">
     <div class="container">
       <Login v-if="answer == 'mismatch'" />
-      <Admin v-if="answer == 'success'" />
-      <DeptChair v-if="answer == 'success'" />
-      <FacultyResearcher v-if="answer == 'success'" />
-      <SparWorker v-if="answer == 'success'" />
+      <Admin v-if="answer == '1'" />
+      <DeptChair v-if="answer == '2'" />
+      <FacultyResearcher v-if="answer == '3'" />
+      <SparWorker v-if="answer == '4'" />
     </div>
   </div>
 </template>
@@ -25,7 +25,7 @@ export default {
     Admin,
     DeptChair,
     FacultyResearcher,
-    SparWorker
+    SparWorker,
   },
   computed: {
     ...mapGetters(["answer"]),

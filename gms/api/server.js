@@ -36,15 +36,17 @@ db.connect((err) => {
 app.post("/check-login", (req, res) => {
   let username = req.body.username;
   let pw = req.body.password;
-  console.log("req =" + JSON.stringify(req.body));
+  //console.log("req =" + JSON.stringify(req.body));
   let sql = `SELECT roleID FROM login WHERE username = ? AND password = ?`;
   db.query(sql, [username, pw], (err, result) => {
     if (err) {
       throw err;
     }
-    console.log(result);
+    //console.log();
     if (result.length > 0) {
-      res.send("success");
+      res.send(
+        String(Object.values(JSON.parse(JSON.stringify(result)))[0].roleID)
+      );
     } else {
       res.send("mismatch");
     }
