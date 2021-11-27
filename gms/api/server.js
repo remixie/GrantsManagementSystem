@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 var cors = require("cors");
 const http = require("http").Server(app);
-//const io = require("socket.io")(http);
 const mysql = require("mysql");
 var port = process.env.PORT || 3000;
 
@@ -115,4 +114,20 @@ app.post("/profiles",(req,res) => {
     });
   }
 
+});
+
+app.post("/chair",(req,res) => {
+  let operation = req.body.operation;
+    if(operation == 'active'){
+      let sql = `select firstName, lastName from Faculty where = ?`
+
+    db.query(sql, [username], (err, result) => {
+      if (err) {
+        throw err;
+      }
+      if (JSON.parse(JSON.stringify(result)).affectedRows == "1") {
+        console.log("A user has been deleted!")
+      }
+    });
+    }
 });

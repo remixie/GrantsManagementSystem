@@ -15,37 +15,38 @@
                     <p>View list of all faculties in the department with current(active) grant-funded projects</p>
                 </td>
                 </tr>
-                <tr>
-                <td>
-                    <label for="deptid"><b>Department ID</b></label>
-                </td>
-                <td>
-                    <select name="deptid" id="deptid" class="dropdown">
-                    <option disabled selected value> -- Select Department ID -- </option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    </select>
-                </td>
-                </tr>
-                <tr/> <tr/> <tr/>
-                <tr>
-                <td colspan=2 style="padding-left:30%;">
-                    <button type="submit">View Faculty List</button>
-                </td>
-                </tr>
             </table>
-
-            <!-- Element to display faculty list goes here -->
+            <table>
+                <tr v-for="faculty in activeFaculty" :key="faculty"><td>{{faculty.firstName}} {{faculty.lastName}}</td></tr>
+            </table>
             
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     name: "FacultyList",
+    data: () => ({
+    activeFaculty: "",
+  }),
+  async mounted(){
+      const config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+    let params = new URLSearchParams();
+    params.append("operation", "get");
+          await axios.post(
+      "http://localhost:3000/chair",
+      params,
+      config
+    ).then(result => {
+        this.activeFaculty = result.data;
+    });
+  }
 }
 </script>
 
