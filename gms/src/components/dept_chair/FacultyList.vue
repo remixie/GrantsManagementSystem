@@ -49,7 +49,6 @@ deptID: "getDept"
       params,
       config
     ).then(result => {
-      console.log(result.data[0].firstName + " "+result.data[0].lastName)
         this.activeFaculty = result.data;
     });
   }

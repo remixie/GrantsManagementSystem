@@ -9,7 +9,7 @@
             <h2>View Total Grant Funding for a Faculty</h2>
         </div>
         <div class="centered">
-            <table>
+            <table v-if="facultyObj.length <= 0">
                 <tr>
                 <td colspan=2>
                     <p>Please select a faculty to view total amount of grant funding received by that faculty</p>
@@ -20,32 +20,66 @@
                     <label for="facultyName"><b>Faculty</b></label>
                 </td>
                 <td>
-                    <select name="facultyName" id="facultyName" class="dropdown">
+                    <select name="facultyName" v-model="selectedFaculty" class="dropdown">
                     <option disabled selected value> -- Select Faculty -- </option>
-                    <option value="a">A</option>
-                    <option value="b">B</option>
-                    <option value="c">C</option>
-                    <option value="d">D</option>
+                    <option v-for="faculty in allFaculty" :key="faculty.facultyID" :value="faculty.facultyID">{{faculty.firstName}} {{faculty.lastName}}</option>
                     </select>
                 </td>
                 </tr>
                 <tr/> <tr/> <tr/>
                 <tr>
                 <td colspan=2 style="padding-left:30%;">
-                    <button type="submit">View Funding</button>
+                    <button type="submit" @click="submit()">View Funding</button>
                 </td>
                 </tr>
             </table>
-
-            <!-- Element to display faculty funcding goes here --> 
-
+            <div v-else>{{facultyObj.firstName}} {{facultyObj.lastName}} has received Total Grant Funding of ${{facultyObj.total}}</div>
         </div>
     </div>
 </template>
 
 <script>
+import axios from "axios";
+import { mapGetters } from 'vuex'
 export default {
     name: "TotalFacultyFunds",
+    data: () => ({
+    selectedFaculty: "",
+allFaculty: ""
+  }),
+    computed: {
+    ...mapGetters({
+deptID: "getDept",
+facultyObj: "getFacultyDetails"
+  })},
+  async mounted(){
+    this.$store.dispatch("faculty", {
+          operation: "clearFacultyObj"
+        });
+      const config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+    let params = new URLSearchParams();
+    params.append("operation", "allFaculty");
+    params.append("deptID", this.deptID);
+          await axios.post(
+      "http://localhost:3000/chair",
+      params,
+      config
+    ).then(result => {
+        this.allFaculty = result.data;
+    });
+  },
+  methods:{
+submit(){
+    this.$store.dispatch("faculty", {
+          facultyID: this.selectedFaculty,
+          operation: "totalFacultyFunds"
+        });
+}
+  }
 }
 </script>
 

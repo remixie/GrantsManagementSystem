@@ -120,11 +120,42 @@ app.post("/profiles",(req,res) => {
 
 app.post("/chair",(req,res) => {
   let operation = req.body.operation;
-  let deptID = req.body.deptID;
+  
     if(operation == 'active'){
+      let deptID = req.body.deptID;
       let sql = `select f.firstName, f.lastName, p.projectTitle from Faculty f join Projects p where f.facultyID = p.facultyID and f.deptID = ? and p.status = '1'`
 
     db.query(sql,[deptID], (err, result) => {
+      if (err) {
+        throw err;
+      }
+      if(result.length > 0) {
+        res.send(result)
+      }
+      
+    });
+    }
+
+    if(operation == 'allFaculty'){
+      let deptID = req.body.deptID;
+      let sql = `select f.firstName, f.lastName, f.facultyID from Faculty f join Projects p where f.facultyID = p.facultyID and f.deptID = ?`
+
+    db.query(sql,[deptID], (err, result) => {
+      if (err) {
+        throw err;
+      }
+      if(result.length > 0) {
+        res.send(result)
+      }
+      
+    });
+    }
+
+    if(operation == 'totalFacultyFunds'){
+      let facultyID = req.body.facultyID;
+      let sql = `select f.firstName, f.lastName, sum(a.initialAmount) as total from Accounts a join Projects p join Faculty f on p.accountID = a.accountID and f.facultyID = p.facultyID where f.facultyID = ?`
+
+    db.query(sql,[facultyID], (err, result) => {
       if (err) {
         throw err;
       }

@@ -1,14 +1,5 @@
 import axios from "axios";
 
-const state = {
-};
-
-const getters = {
-};
-
-const mutations = {
-};
-
 const config = {
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
@@ -31,8 +22,5 @@ const actions = {
 };
 
 export default {
-  state,
-  getters,
   actions,
-  mutations,
 };

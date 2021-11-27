@@ -26,7 +26,6 @@ const mutations = {
 
 const actions = {
   async doLogin({ commit }, payload) {
-    //alert("hello!");
     const config = {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
