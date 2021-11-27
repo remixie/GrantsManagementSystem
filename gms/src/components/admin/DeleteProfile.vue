@@ -20,33 +20,16 @@
                     <label for="userid"><b>User ID</b></label>
                 </td>
                 <td>
-                    <select name="userid" id="userid" class="dropdown">
-                    <option disabled selected value> ----- Select User ID ----- </option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    </select>
-                </td>
-                </tr>
-                <tr>
-                <td>
-                    <label for="roleid"><b>Role ID</b></label>
-                </td>
-                 <td>
-                    <select name="roleid" id="roleid" class="dropdown">
-                    <option disabled selected value> ----- Select Role ID ----- </option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
+                    <select name="userid" v-model="selectedUsername" class="dropdown">
+                    <option disabled selected value> ----- Select username ----- </option>
+                    <option v-for="username in usernames" :key="username" :value="username">{{username}}</option>
                     </select>
                 </td>
                 </tr>
                 <tr/> <tr/> <tr/>
                 <tr>
                 <td colspan=2 style="padding-left:23%;">
-                    <button type="submit">Delete</button>
+                    <button type="submit" @click="submit()">Delete</button>
                 </td>
                 </tr>
             </table>
@@ -55,8 +38,38 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     name: "DeleteProfile",
+    data: () => ({
+    usernames: "",
+    selectedUsername: ""
+  }),
+  methods:{
+      submit(){
+          this.$store.dispatch("profiles", {
+          username: this.selectedUsername,
+          operation: "delete"
+        });
+        this.$router.push('/');
+      }
+  },
+    async mounted() {
+        const config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+    let params = new URLSearchParams();
+    params.append("operation", "get");
+          await axios.post(
+      "http://localhost:3000/profiles",
+      params,
+      config
+    ).then(result => {
+        this.usernames = result.data;
+    });
+        }
 }
 </script>
 

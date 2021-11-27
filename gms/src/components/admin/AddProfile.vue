@@ -77,7 +77,7 @@ export default {
    methods: {
   submit() {
       if (this.username && this.password) {
-        this.$store.dispatch("addUser", {
+        this.$store.dispatch("profiles", {
           username: this.username,
           password: this.password,
           roleid: this.roleid,

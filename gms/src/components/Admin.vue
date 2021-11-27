@@ -12,7 +12,7 @@
     <div class="container">
       <div id="admin" class="vertical-menu">
         <router-link to="/addNewProfile">Add a new Profile</router-link>
-        <router-link to="/updateProfile">Update Profile</router-link>
+        <router-link to="/updateProfile">Update Profile Password</router-link>
         <router-link to="/deleteProfile">Delete Profile</router-link>
       </div>
     </div>

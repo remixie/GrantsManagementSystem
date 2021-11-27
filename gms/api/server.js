@@ -55,6 +55,21 @@ app.post("/check-login", (req, res) => {
 app.post("/profiles",(req,res) => {
   let operation = req.body.operation;
 
+  if(operation == "get"){
+    let sql = `Select username from Users`;
+    db.query(sql, (err, result) => {
+      if (err) {
+        throw err;
+      }
+      let obj = (JSON.parse(JSON.stringify(result))).map(function(value){return value.username})
+      if (obj.length > 0) {
+        res.send(
+          obj
+        );
+      }
+    });
+  }
+
   if(operation == "add"){
     let username = req.body.username;
     let pw = req.body.password;
@@ -67,8 +82,6 @@ app.post("/profiles",(req,res) => {
       }
       if (JSON.parse(JSON.stringify(result)).affectedRows == "1") {
         console.log("A new user has been added!")
-      } else {
-        res.send("error");
       }
     });
   }
@@ -80,8 +93,17 @@ app.post("/profiles",(req,res) => {
   }
 
   if(operation == "delete"){
-    let userID = req.body.userID;
-    let sql = `DELETE from Users where userID = ?`
+    let username = req.body.username;
+    let sql = `DELETE from Users where username = ?`
+
+    db.query(sql, [username], (err, result) => {
+      if (err) {
+        throw err;
+      }
+      if (JSON.parse(JSON.stringify(result)).affectedRows == "1") {
+        console.log("A user has been deleted!")
+      }
+    });
   }
 
 });

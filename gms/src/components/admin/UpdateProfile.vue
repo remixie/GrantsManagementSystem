@@ -21,28 +21,9 @@
           </td>
           <td>
             <select name="userid" id="userid" class="dropdown">
-              <option disabled selected value> ----- Select User ID ----- </option>
+              <option disabled selected value> ----- Select username ----- </option>
               <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
             </select>
-          </td>
-        </tr>
-         <tr>
-          <td>
-            <label for="roleid"><b>Role ID</b></label>
-          </td>
-          <td>
-            <input type="text" placeholder="Enter Role ID" name="roleid" id="roleid" required>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="username"><b>Username</b></label>
-          </td>
-          <td>
-            <input type="text" placeholder="Enter Username" name="username" id="username" required>
           </td>
         </tr>
         <tr>
