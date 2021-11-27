@@ -87,9 +87,18 @@ app.post("/profiles",(req,res) => {
   }
 
   if(operation == "update"){
-    let userID = req.body.userID;
     let pw = req.body.password;
-    let sql =  `UPDATE Users Set password = ? where userID = ?`
+    let username = req.body.username;
+    let sql =  `UPDATE Users Set password = ? where username = ?`
+
+    db.query(sql, [pw, username], (err, result) => {
+      if (err) {
+        throw err;
+      }
+      if (JSON.parse(JSON.stringify(result)).affectedRows == "1") {
+        console.log("A user has been updated!")
+      }
+    });
   }
 
   if(operation == "delete"){
