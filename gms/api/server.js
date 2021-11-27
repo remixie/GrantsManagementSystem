@@ -37,12 +37,11 @@ app.post("/check-login", (req, res) => {
   let username = req.body.username;
   let pw = req.body.password;
   //console.log("req =" + JSON.stringify(req.body));
-  let sql = `SELECT roleID FROM login WHERE username = ? AND password = ?`;
+  let sql = `SELECT roleID FROM Users WHERE username = ? AND password = ?`;
   db.query(sql, [username, pw], (err, result) => {
     if (err) {
       throw err;
     }
-    //console.log();
     if (result.length > 0) {
       res.send(
         String(Object.values(JSON.parse(JSON.stringify(result)))[0].roleID)
@@ -51,4 +50,38 @@ app.post("/check-login", (req, res) => {
       res.send("mismatch");
     }
   });
+});
+
+app.post("/profiles",(req,res) => {
+  let operation = req.body.operation;
+
+  if(operation == "add"){
+    let username = req.body.username;
+    let pw = req.body.password;
+    let rid= req.body.roleid;
+    let sql = `INSERT into Users (roleID, username, password) VALUES (?,?,?)`;
+
+    db.query(sql, [rid, username, pw], (err, result) => {
+      if (err) {
+        throw err;
+      }
+      if (JSON.parse(JSON.stringify(result)).affectedRows == "1") {
+        console.log("A new user has been added!")
+      } else {
+        res.send("error");
+      }
+    });
+  }
+
+  if(operation == "update"){
+    let userID = req.body.userID;
+    let pw = req.body.password;
+    let sql =  `UPDATE Users Set password = ? where userID = ?`
+  }
+
+  if(operation == "delete"){
+    let userID = req.body.userID;
+    let sql = `DELETE from Users where userID = ?`
+  }
+
 });

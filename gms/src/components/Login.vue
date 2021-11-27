@@ -18,8 +18,6 @@
               type="text"
               v-model="username"
               placeholder="Enter Username"
-              name="uname"
-              required
             />
           </td>
         </tr>
@@ -33,8 +31,6 @@
               type="password"
               v-model="password"
               placeholder="Enter Password"
-              name="psw"
-              required
             />
           </td>
         </tr>
@@ -47,7 +43,7 @@
         <tr>
           <td></td>
           <td class="left">
-            <button type="submit" v-on:click="onLogin()">Login</button>
+            <button type="submit" @click="onLogin()">Login</button>
           </td>
         </tr>
       </table>
@@ -56,8 +52,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
 export default {
   name: "Login",
   data: () => ({
@@ -65,7 +59,6 @@ export default {
     password: "",
   }),
   methods: {
-    ...mapActions(["doLogin"]),
     onLogin() {
       if (this.username && this.password) {
         this.$store.dispatch("doLogin", {
@@ -73,7 +66,7 @@ export default {
           password: this.password,
         });
       } else {
-        alert("Please enter username and/or password!");
+        alert("Please enter username and/or password");
       }
     },
   },

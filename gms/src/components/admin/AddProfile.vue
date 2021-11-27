@@ -18,15 +18,27 @@
         </tr>
         <tr>
           <td>
+            <label for="roleid"><b>Role</b></label>
+          </td>
+          <td>
+            <select name="roleid" v-model="roleid" class="dropdown">
+              <option disabled selected value> ----- Select Role ----- </option>
+              <option value="1">Admin</option>
+              <option value="2">Chair</option>
+              <option value="3">Faculty Researcher</option>
+              <option value="4">Worker</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
             <label for="username"><b>Username</b></label>
           </td>
           <td>
             <input
               type="text"
+              v-model="username"
               placeholder="Enter Username"
-              name="username"
-              id="username"
-              required
             />
           </td>
         </tr>
@@ -37,24 +49,8 @@
           <td>
             <input
               type="password"
+              v-model="password"
               placeholder="Enter Password"
-              name="psw"
-              id="psw"
-              required
-            />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="roleid"><b>Role ID</b></label>
-          </td>
-          <td>
-            <input
-              type="text"
-              placeholder="Enter Role ID"
-              name="roleid"
-              id="roleid"
-              required
             />
           </td>
         </tr>
@@ -63,7 +59,7 @@
         <tr />
         <tr>
           <td colspan="2" style="text-align: center">
-            <button type="submit">Submit</button>
+            <button type="submit" @click="submit('')">Submit</button>
           </td>
         </tr>
       </table>
@@ -73,11 +69,41 @@
 
 <script>
 export default {
-  name: "AddProfile",
+  name: "AddProfile",data: () => ({
+    username: "",
+    password: "",
+    roleid: ""
+  }),
+   methods: {
+  submit() {
+      if (this.username && this.password) {
+        this.$store.dispatch("addUser", {
+          username: this.username,
+          password: this.password,
+          roleid: this.roleid,
+          operation: "add"
+        });
+        this.$router.push('/');
+      } else {
+        alert("Please enter username and password");
+      }
+    },
+   }
 };
 </script>
 
 <style scoped>
+
+  .dropdown{
+        background-color: #04AA6D;
+        color: white;
+        padding: 5px 12px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+        width:85%;
+  }
 h2 {
   margin-left: 15%;
 }
