@@ -17,20 +17,24 @@
                 </tr>
             </table>
             <table>
-                <tr v-for="faculty in activeFaculty" :key="faculty"><td>{{faculty.firstName}} {{faculty.lastName}}</td></tr>
+                <tr v-for="faculty in activeFaculty" :key="faculty"><td>{{faculty.firstName}} {{faculty.lastName}} is working on {{faculty.projectTitle}}</td></tr>
             </table>
-            
         </div>
     </div>
 </template>
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
     name: "FacultyList",
     data: () => ({
     activeFaculty: "",
   }),
+  computed: {
+    ...mapGetters({
+deptID: "getDept"
+  })},
   async mounted(){
       const config = {
       headers: {
@@ -38,12 +42,14 @@ export default {
       },
     };
     let params = new URLSearchParams();
-    params.append("operation", "get");
+    params.append("operation", "active");
+    params.append("deptID", this.deptID);
           await axios.post(
       "http://localhost:3000/chair",
       params,
       config
     ).then(result => {
+      console.log(result.data[0].firstName + " "+result.data[0].lastName)
         this.activeFaculty = result.data;
     });
   }

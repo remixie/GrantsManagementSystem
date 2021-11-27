@@ -3,17 +3,24 @@ import axios from "axios";
 
 const state = {
   server_answer: "mismatch",
+  deptID: ""
 };
 
 const getters = {
   answer: (state) => {
     return state.server_answer;
   },
+  getDept: (state) =>{
+    return state.deptID;
+  }
 };
 
 const mutations = {
   setStatus(state, payload) {
-    state.server_answer = payload.data;
+    state.server_answer = payload;
+  },
+  setDept(state, payload) {
+    state.deptID = payload;
   },
 };
 
@@ -35,7 +42,8 @@ const actions = {
       config
     );
 
-    commit("setStatus", response);
+    commit("setStatus", response.data.roleID);
+    commit("setDept",response.data.deptID);
   },
 };
 

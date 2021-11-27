@@ -35,15 +35,17 @@ db.connect((err) => {
 app.post("/check-login", (req, res) => {
   let username = req.body.username;
   let pw = req.body.password;
-  //console.log("req =" + JSON.stringify(req.body));
-  let sql = `SELECT roleID FROM Users WHERE username = ? AND password = ?`;
+
+  let sql = `SELECT u.roleID, f.deptID FROM Users u join Faculty f on f.userID = u.userID WHERE u.username = ? AND u.password = ?`;
   db.query(sql, [username, pw], (err, result) => {
     if (err) {
       throw err;
     }
     if (result.length > 0) {
       res.send(
-        String(Object.values(JSON.parse(JSON.stringify(result)))[0].roleID)
+        {roleID : String(Object.values(JSON.parse(JSON.stringify(result)))[0].roleID),
+          deptID: String(Object.values(JSON.parse(JSON.stringify(result)))[0].deptID)
+        }
       );
     } else {
       res.send("mismatch");
@@ -118,16 +120,18 @@ app.post("/profiles",(req,res) => {
 
 app.post("/chair",(req,res) => {
   let operation = req.body.operation;
+  let deptID = req.body.deptID;
     if(operation == 'active'){
-      let sql = `select firstName, lastName from Faculty where = ?`
+      let sql = `select f.firstName, f.lastName, p.projectTitle from Faculty f join Projects p where f.facultyID = p.facultyID and f.deptID = ? and p.status = '1'`
 
-    db.query(sql, [username], (err, result) => {
+    db.query(sql,[deptID], (err, result) => {
       if (err) {
         throw err;
       }
-      if (JSON.parse(JSON.stringify(result)).affectedRows == "1") {
-        console.log("A user has been deleted!")
+      if(result.length > 0) {
+        res.send(result)
       }
+      
     });
     }
 });
