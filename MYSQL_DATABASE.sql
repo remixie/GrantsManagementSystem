@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Nov 27, 2021 at 05:45 AM
+-- Generation Time: Nov 27, 2021 at 09:32 PM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.20
 
@@ -26,22 +26,15 @@ USE `MYSQL_DATABASE`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Accounts`
+-- Stand-in structure for view `Accounts`
+-- (See below for the actual view)
 --
-
 CREATE TABLE `Accounts` (
-  `accountID` int NOT NULL,
-  `initialAmount` decimal(13,2) NOT NULL,
-  `remainingAmount` decimal(13,2) NOT NULL,
-  `status` set('Active','Closed') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Active'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
---
--- Dumping data for table `Accounts`
---
-
-INSERT INTO `Accounts` (`accountID`, `initialAmount`, `remainingAmount`, `status`) VALUES
-(1, '1000.00', '500.00', 'Active');
+`facultyID` int
+,`status` bit(1)
+,`totalAwarded` decimal(35,2)
+,`totalRemaining` decimal(40,6)
+);
 
 -- --------------------------------------------------------
 
@@ -50,16 +43,18 @@ INSERT INTO `Accounts` (`accountID`, `initialAmount`, `remainingAmount`, `status
 --
 
 CREATE TABLE `Departments` (
-  `DeptID` int NOT NULL,
-  `DepartmentName` text NOT NULL
+  `deptID` int NOT NULL,
+  `departmentName` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `Departments`
 --
 
-INSERT INTO `Departments` (`DeptID`, `DepartmentName`) VALUES
-(1, 'Computer Science');
+INSERT INTO `Departments` (`deptID`, `departmentName`) VALUES
+(1, 'Computer Science'),
+(2, 'IT'),
+(3, 'SPAR');
 
 -- --------------------------------------------------------
 
@@ -80,7 +75,57 @@ CREATE TABLE `Faculty` (
 --
 
 INSERT INTO `Faculty` (`facultyID`, `firstName`, `lastName`, `deptID`, `userID`) VALUES
-(1, 'Dr', 'Rem', 1, 3);
+(1, 'Dr', 'Rem', 1, 2),
+(2, 'Dr.', 'Fred', 1, 3),
+(3, 'Romani', 'Buckley', 2, 1),
+(4, 'Remoni', 'Anderson', 3, 4),
+(5, 'Dr', 'Amin', 1, 18);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Grants`
+--
+
+CREATE TABLE `Grants` (
+  `grantID` int NOT NULL,
+  `grantName` text NOT NULL,
+  `grantAmount` decimal(13,2) NOT NULL,
+  `facultyID` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `Grants`
+--
+
+INSERT INTO `Grants` (`grantID`, `grantName`, `grantAmount`, `facultyID`) VALUES
+(1, 'National Grant for Chips Research', '1000.00', 1),
+(2, 'National Grant for Vegetables Research', '2000.00', 5),
+(3, 'Additional Grant for Chips Research', '500.00', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Projects`
+--
+
+CREATE TABLE `Projects` (
+  `projectID` int NOT NULL,
+  `projectTitle` text NOT NULL,
+  `projectStartDate` date NOT NULL,
+  `projectEndDate` date NOT NULL,
+  `status` bit(1) NOT NULL,
+  `facultyID` int NOT NULL,
+  `sponsorID` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `Projects`
+--
+
+INSERT INTO `Projects` (`projectID`, `projectTitle`, `projectStartDate`, `projectEndDate`, `status`, `facultyID`, `sponsorID`) VALUES
+(1, 'Theory of Nachos', '2021-11-01', '2031-11-01', b'1', 1, 1),
+(2, 'Theory of Salad', '2021-11-01', '2031-11-01', b'1', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -99,7 +144,28 @@ CREATE TABLE `Sponsors` (
 --
 
 INSERT INTO `Sponsors` (`sponsorID`, `sponsorName`, `Sponsor_type`) VALUES
-(1, 'Penguin Stories', 'Non-Profit');
+(1, 'Penguin Organization', 'Non-Profit');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Transactions`
+--
+
+CREATE TABLE `Transactions` (
+  `transactionID` int NOT NULL,
+  `date` date NOT NULL,
+  `transactionAmount` decimal(13,2) NOT NULL,
+  `facultyID` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `Transactions`
+--
+
+INSERT INTO `Transactions` (`transactionID`, `date`, `transactionAmount`, `facultyID`) VALUES
+(1, '2021-11-03', '200.00', 1),
+(2, '2021-11-10', '800.00', 5);
 
 -- --------------------------------------------------------
 
@@ -123,23 +189,26 @@ INSERT INTO `Users` (`userID`, `roleID`, `username`, `password`) VALUES
 (2, '2', 'chair', 'test'),
 (3, '3', 'researcher', 'test'),
 (4, '4', 'worker', 'test'),
-(16, '1', 'hello', 'you');
+(18, '3', 'researcher2', 'test');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `Accounts`
+--
+DROP TABLE IF EXISTS `Accounts`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `accounts`  AS SELECT `g`.`facultyID` AS `facultyID`, `p`.`status` AS `status`, sum(`g`.`grantAmount`) AS `totalAwarded`, (sum(`g`.`grantAmount`) - (sum(`t`.`transactionAmount`) / 2)) AS `totalRemaining` FROM (`grants` `g` join (`transactions` `t` join `projects` `p`) on(((`p`.`facultyID` = `g`.`facultyID`) and (`g`.`facultyID` = `t`.`facultyID`)))) GROUP BY `g`.`facultyID` ;
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `Accounts`
---
-ALTER TABLE `Accounts`
-  ADD PRIMARY KEY (`accountID`);
-
---
 -- Indexes for table `Departments`
 --
 ALTER TABLE `Departments`
-  ADD PRIMARY KEY (`DeptID`);
+  ADD PRIMARY KEY (`deptID`);
 
 --
 -- Indexes for table `Faculty`
@@ -150,10 +219,32 @@ ALTER TABLE `Faculty`
   ADD KEY `FK_faculty_userid` (`userID`);
 
 --
+-- Indexes for table `Grants`
+--
+ALTER TABLE `Grants`
+  ADD PRIMARY KEY (`grantID`),
+  ADD KEY `fk_grantsfaculty` (`facultyID`);
+
+--
+-- Indexes for table `Projects`
+--
+ALTER TABLE `Projects`
+  ADD PRIMARY KEY (`projectID`),
+  ADD KEY `FK_projectfaculty` (`facultyID`),
+  ADD KEY `FK_projectsponsors` (`sponsorID`);
+
+--
 -- Indexes for table `Sponsors`
 --
 ALTER TABLE `Sponsors`
   ADD PRIMARY KEY (`sponsorID`);
+
+--
+-- Indexes for table `Transactions`
+--
+ALTER TABLE `Transactions`
+  ADD PRIMARY KEY (`transactionID`),
+  ADD KEY `fk_transactionfaculty` (`facultyID`);
 
 --
 -- Indexes for table `Users`
@@ -166,22 +257,28 @@ ALTER TABLE `Users`
 --
 
 --
--- AUTO_INCREMENT for table `Accounts`
---
-ALTER TABLE `Accounts`
-  MODIFY `accountID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
 -- AUTO_INCREMENT for table `Departments`
 --
 ALTER TABLE `Departments`
-  MODIFY `DeptID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `deptID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `Faculty`
 --
 ALTER TABLE `Faculty`
-  MODIFY `facultyID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `facultyID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `Grants`
+--
+ALTER TABLE `Grants`
+  MODIFY `grantID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `Projects`
+--
+ALTER TABLE `Projects`
+  MODIFY `projectID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `Sponsors`
@@ -190,10 +287,16 @@ ALTER TABLE `Sponsors`
   MODIFY `sponsorID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `Transactions`
+--
+ALTER TABLE `Transactions`
+  MODIFY `transactionID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `userID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `userID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints for dumped tables
@@ -203,8 +306,27 @@ ALTER TABLE `Users`
 -- Constraints for table `Faculty`
 --
 ALTER TABLE `Faculty`
-  ADD CONSTRAINT `FK_faculty_dept` FOREIGN KEY (`deptID`) REFERENCES `Departments` (`DeptID`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_faculty_dept` FOREIGN KEY (`deptID`) REFERENCES `Departments` (`deptID`) ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_faculty_userid` FOREIGN KEY (`userID`) REFERENCES `Users` (`userID`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Grants`
+--
+ALTER TABLE `Grants`
+  ADD CONSTRAINT `fk_grantsfaculty` FOREIGN KEY (`facultyID`) REFERENCES `Faculty` (`facultyID`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Projects`
+--
+ALTER TABLE `Projects`
+  ADD CONSTRAINT `FK_projectfaculty` FOREIGN KEY (`facultyID`) REFERENCES `Faculty` (`facultyID`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_projectsponsors` FOREIGN KEY (`sponsorID`) REFERENCES `Sponsors` (`sponsorID`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `Transactions`
+--
+ALTER TABLE `Transactions`
+  ADD CONSTRAINT `fk_transactionfaculty` FOREIGN KEY (`facultyID`) REFERENCES `Faculty` (`facultyID`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

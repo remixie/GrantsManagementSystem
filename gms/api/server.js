@@ -153,7 +153,7 @@ app.post("/chair",(req,res) => {
 
     if(operation == 'allFunding'){
       let deptID = req.body.deptID;
-      let sql = `select sum(a.initialAmount) as total, d.departmentName  from Accounts a join Projects p join Faculty f join Departments d on d.deptID = f.deptID and p.accountID = a.accountID and f.facultyID = p.facultyID and f.deptID = ?`
+      let sql = `select sum(a.totalAwarded) as total, d.departmentName  from Accounts a join Projects p join Faculty f join Departments d on d.deptID = f.deptID and p.facultyID = a.facultyID and f.facultyID = p.facultyID and f.deptID = ?`
       db.query(sql,[deptID], (err, result) => {
         if (err) {
           throw err;
@@ -166,7 +166,7 @@ app.post("/chair",(req,res) => {
 
     if(operation == 'totalFacultyFunds'){
       let facultyID = req.body.facultyID;
-      let sql = `select f.firstName, f.lastName, sum(a.initialAmount) as total from Accounts a join Projects p join Faculty f on p.accountID = a.accountID and f.facultyID = p.facultyID where f.facultyID = ?`
+      let sql = `select f.firstName, f.lastName, sum(a.totalAwarded) as total from Accounts a join Projects p join Faculty f on p.facultyID = a.facultyID and f.facultyID = p.facultyID where f.facultyID = ?`
 
     db.query(sql,[facultyID], (err, result) => {
       if (err) {
