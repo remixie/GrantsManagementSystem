@@ -8,40 +8,30 @@
             <h2>View Available Funds</h2>
         </div>
         <div class="centered">
-            <table>
-                <tr>
-                    <td colspan=2>
-                        <p>View available funds in active grant account</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="grantAcc"><b> Grant Account</b></label>
-                    </td>
-                    <td>
-                        <select name="grantAcc" id="grantAcc" class="dropdown">
-                        <option disabled selected value> ----- Select account ----- </option>
-                        <option value="a">Grant Account</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr/> <tr/> <tr/>
-                <tr>
-                    <td colspan=2 style="padding-left:30%;">
-                        <button type="submit">View Funds</button>
-                    </td>
-                </tr>
-            </table>
 
-            <!-- Element to display total funds goes here --> 
-
+            <div>You have an available balance of ${{facultyObj.totalRemaining}}</div>
+        
         </div>
     </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
     name: "AvailableFunds",
+        data: () => ({
+  }),
+   computed: {
+    ...mapGetters({
+facultyID: "getFac",
+facultyObj: "getFacultyDetails"
+  })},
+    async mounted(){
+            this.$store.dispatch("faculty", {
+          facultyID: this.facultyID,
+          operation: "remainingFacultyFunds"
+        });
+    }
 }
 </script>
 

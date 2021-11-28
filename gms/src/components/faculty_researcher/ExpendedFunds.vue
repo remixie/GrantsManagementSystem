@@ -11,13 +11,11 @@
             <table>
                 <tr>
                     <td colspan=2>
-                        <p>View Transactions</p>
+                        <p>View Transactions made by the Researcher</p>
                     </td>
                 </tr>
             </table>
             
-
-            <!-- Element to display total remaining funds goes here --> 
 
         </div>
     </div>
