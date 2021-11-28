@@ -11,19 +11,41 @@
             <p>View list of all active grants awarded to PI</p>
             <h3> All Active Grants List </h3>
             <ul>
-                <li>Grant A</li>
-                <li>Grant B</li>
-                <li>Grant C</li>
-                <li>Grant D</li>
-                <li>Grant E</li>
+                <li v-for="grant in activeGrants" :key="grant.grantID">{{grant.grantName}}</li>
             </ul>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
     name: "AllActiveGrants",
+    data: () => ({
+    activeGrants: "",
+  }),
+   computed: {
+    ...mapGetters({
+facultyID: "getFac"
+  })},
+    async mounted(){
+      const config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+    let params = new URLSearchParams();
+    params.append("operation", "activeGrantNames");
+    params.append("facultyID", this.facultyID);
+          await axios.post(
+      "http://localhost:3000/fac",
+      params,
+      config
+    ).then(result => {
+        this.activeGrants = result.data;
+    });
+  }
 }
 </script>
 

@@ -36,7 +36,7 @@ app.post("/check-login", (req, res) => {
   let username = req.body.username;
   let pw = req.body.password;
 
-  let sql = `SELECT u.roleID, f.deptID FROM Users u join Faculty f on f.userID = u.userID WHERE u.username = ? AND u.password = ?`;
+  let sql = `SELECT u.roleID, f.deptID, f.facultyID FROM Users u join Faculty f on f.userID = u.userID WHERE u.username = ? AND u.password = ?`;
   db.query(sql, [username, pw], (err, result) => {
     if (err) {
       throw err;
@@ -44,11 +44,12 @@ app.post("/check-login", (req, res) => {
     if (result.length > 0) {
       res.send(
         {roleID : String(Object.values(JSON.parse(JSON.stringify(result)))[0].roleID),
-          deptID: String(Object.values(JSON.parse(JSON.stringify(result)))[0].deptID)
+          deptID: String(Object.values(JSON.parse(JSON.stringify(result)))[0].deptID),
+          facultyID:String(Object.values(JSON.parse(JSON.stringify(result)))[0].facultyID)
         }
       );
     } else {
-      res.send({roleID: "mismatch",deptID: ""});
+      res.send({roleID: "mismatch",deptID: "",facultyID:""});
     }
   });
 });
@@ -167,6 +168,40 @@ app.post("/chair",(req,res) => {
     if(operation == 'totalFacultyFunds'){
       let facultyID = req.body.facultyID;
       let sql = `select f.firstName, f.lastName, sum(a.totalAwarded) as total from Accounts a join Projects p join Faculty f on p.facultyID = a.facultyID and f.facultyID = p.facultyID where f.facultyID = ?`
+
+    db.query(sql,[facultyID], (err, result) => {
+      if (err) {
+        throw err;
+      }
+      if(result.length > 0) {
+        res.send(result)
+      }
+      
+    });
+    }
+});
+
+
+app.post("/fac",(req,res) => {
+  let operation = req.body.operation;
+    if(operation == "allAwardedGrantNames"){
+      let facultyID = req.body.facultyID;
+      let sql = `select grantID, grantName from Grants where facultyID = ?`
+
+    db.query(sql,[facultyID], (err, result) => {
+      if (err) {
+        throw err;
+      }
+      if(result.length > 0) {
+        res.send(result)
+      }
+      
+    });
+    }
+
+    if(operation == "activeGrantNames"){
+      let facultyID = req.body.facultyID;
+      let sql = `select grantID, grantName from Grants g  join Accounts a on g.facultyID = a.facultyID where g.facultyID = ? and a.status = 1`
 
     db.query(sql,[facultyID], (err, result) => {
       if (err) {

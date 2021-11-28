@@ -3,7 +3,8 @@ import axios from "axios";
 
 const state = {
   server_answer: "mismatch",
-  deptID: ""
+  deptID: "",
+  facultyID: ""
 };
 
 const getters = {
@@ -12,6 +13,9 @@ const getters = {
   },
   getDept: (state) =>{
     return state.deptID;
+  },
+  getFac: (state) =>{
+    return state.facultyID;
   }
 };
 
@@ -21,6 +25,10 @@ const mutations = {
   },
   setDept(state, payload) {
     state.deptID = payload;
+  },
+
+  setFac(state, payload) {
+    state.facultyID = payload;
   },
 };
 
@@ -42,6 +50,7 @@ const actions = {
     ).then(response => {
       commit("setStatus", response.data.roleID);
     commit("setDept",response.data.deptID);
+    commit("setFac",response.data.facultyID);
     });
     
   },
