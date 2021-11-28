@@ -124,7 +124,7 @@ app.post("/chair",(req,res) => {
   
     if(operation == 'active'){
       let deptID = req.body.deptID;
-      let sql = `select f.firstName, f.lastName, p.projectTitle from Faculty f join Projects p where f.facultyID = p.facultyID and f.deptID = ? and p.status = '1'`
+      let sql = `select distinct f.firstName, f.lastName, p.projectTitle from Faculty f join Projects p join Grants g where f.facultyID = p.facultyID and g.facultyID = f.facultyID and f.deptID = ? and g.status = '1'`
 
     db.query(sql,[deptID], (err, result) => {
       if (err) {
@@ -154,7 +154,7 @@ app.post("/chair",(req,res) => {
 
     if(operation == 'allFunding'){
       let deptID = req.body.deptID;
-      let sql = `select sum(a.totalAwarded) as total, d.departmentName  from Accounts a join Projects p join Faculty f join Departments d on d.deptID = f.deptID and p.facultyID = a.facultyID and f.facultyID = p.facultyID and f.deptID = ?`
+      let sql = `select sum(a.totalAwarded) as total, d.departmentName from Accounts a join Projects p join Faculty f join Departments d on d.deptID = f.deptID and p.facultyID = a.facultyID and f.facultyID = p.facultyID and f.deptID = ?`
       db.query(sql,[deptID], (err, result) => {
         if (err) {
           throw err;
@@ -201,7 +201,7 @@ app.post("/fac",(req,res) => {
 
     if(operation == "activeGrantNames"){
       let facultyID = req.body.facultyID;
-      let sql = `select grantID, grantName from Grants g  join Accounts a on g.facultyID = a.facultyID where g.facultyID = ? and a.status = 1`
+      let sql = `select grantID, grantName from Grants g where g.facultyID = ? and g.status = 1`
 
     db.query(sql,[facultyID], (err, result) => {
       if (err) {

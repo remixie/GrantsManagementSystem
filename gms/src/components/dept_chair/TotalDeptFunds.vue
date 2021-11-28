@@ -5,11 +5,11 @@
                 <router-link to="/">Home</router-link> |
                 <router-link to="/about">About</router-link> 
             </div>
-            <h2>View Total Department Grant Funding</h2>
+            <h2>View Total Department Active Grant Funding</h2>
         </div>
         <div class="centered">
             <table>
-                <tr><td>The Total Grant Funding for the {{details.departmentName}} Department is ${{details.total}}</td></tr>
+                <tr><td>The Active Grant Funding for the {{details.departmentName}} Department is ${{details.total}}</td></tr>
             </table>
         </div>
     </div>

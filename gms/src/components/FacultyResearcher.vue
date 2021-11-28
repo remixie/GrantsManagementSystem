@@ -15,10 +15,8 @@
         <router-link to="/listCurrentProjects">View Current Sponsored Projects</router-link>
         <router-link to="/allAwardedGrants">View All Awarded Grants</router-link>
         <router-link to="/allActiveGrants">View All Active Grants</router-link>
-        <router-link to="/fundsReceivedByFaculty">View Total Grant Funding Received</router-link>
-        <router-link to="/specificProjectGrants">View Grants for Specific Project</router-link>
         <router-link to="/availableFunds">View Available Funds</router-link>
-        <router-link to="/expendedFunds">View Expended Funds</router-link>
+        <router-link to="/expendedFunds">View Transactions</router-link>
       </div>
     </div>
   </div>

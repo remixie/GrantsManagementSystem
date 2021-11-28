@@ -12,8 +12,6 @@ import AllSponsoredProjects from "../components/faculty_researcher/AllSponsoredP
 import CurrentSponsoredProjects from "../components/faculty_researcher/CurrentSponsoredProjects.vue";
 import AllAwardedGrants from "../components/faculty_researcher/AllAwardedGrants.vue";
 import AllActiveGrants from "../components/faculty_researcher/AllActiveGrants.vue";
-import FacultyResearcherFundsReceived from "../components/faculty_researcher/FacultyResearcherFundsReceived.vue";
-import GrantsForSpecificProject from "../components/faculty_researcher/GrantsForSpecificProject.vue";
 import AvailableFunds from "../components/faculty_researcher/AvailableFunds.vue";
 import ExpendedFunds from "../components/faculty_researcher/ExpendedFunds.vue";
 import ViewGrants from "../components/spar_worker/ViewGrants.vue";
@@ -92,16 +90,6 @@ const routes = [
     path: '/allActiveGrants',
     name: 'AllActiveGrants',
     component: AllActiveGrants
-  },
-  {
-    path: '/fundsReceivedByFaculty',
-    name: 'FacultyResearcherFundsReceived',
-    component: FacultyResearcherFundsReceived
-  },
-  {
-    path: '/specificProjectGrants',
-    name: 'GrantsForSpecificProject',
-    component: GrantsForSpecificProject
   },
   {
     path: '/availableFunds',

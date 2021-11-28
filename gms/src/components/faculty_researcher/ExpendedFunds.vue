@@ -5,33 +5,17 @@
                 <router-link to="/">Home</router-link> |
                 <router-link to="/about">About</router-link> 
             </div>
-            <h2>View Expended Funds</h2>
+            <h2>View Transactions</h2>
         </div>
         <div class="centered">
             <table>
                 <tr>
                     <td colspan=2>
-                        <p>View amount of funds spent to date from active grant account</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label for="grantAcc"><b> Grant Account</b></label>
-                    </td>
-                    <td>
-                        <select name="grantAcc" id="grantAcc" class="dropdown">
-                        <option disabled selected value> ----- Select account ----- </option>
-                        <option value="a">Grant Account</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr/> <tr/> <tr/>
-                <tr>
-                    <td colspan=2 style="padding-left:30%;">
-                        <button type="submit">View Funds</button>
+                        <p>View Transactions</p>
                     </td>
                 </tr>
             </table>
+            
 
             <!-- Element to display total remaining funds goes here --> 
 

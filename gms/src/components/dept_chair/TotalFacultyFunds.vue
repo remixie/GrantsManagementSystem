@@ -5,13 +5,13 @@
                 <router-link to="/">Home</router-link> |
                 <router-link to="/about">About</router-link> 
             </div>
-            <h2>View Total Grant Funding for a Faculty</h2>
+            <h2>View Total Active Grant Funding for a Faculty</h2>
         </div>
         <div class="centered">
             <table v-if="facultyObj.length <= 0">
                 <tr>
                 <td colspan=2>
-                    <p>Please select a faculty to view total amount of grant funding received by that faculty</p>
+                    <p>Please select a faculty to view total amount of active grant funding received by that faculty</p>
                 </td>
                 </tr>
                 <tr>
@@ -32,7 +32,7 @@
                 </td>
                 </tr>
             </table>
-            <div v-else>{{facultyObj.firstName}} {{facultyObj.lastName}} has received Total Grant Funding of ${{facultyObj.total}}</div>
+            <div v-else>{{facultyObj.firstName}} {{facultyObj.lastName}} has Active Grant Funding of ${{facultyObj.total}}</div>
         </div>
     </div>
 </template>

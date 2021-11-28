@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Nov 27, 2021 at 09:32 PM
+-- Generation Time: Nov 28, 2021 at 02:20 AM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.20
 
@@ -26,10 +26,10 @@ USE `MYSQL_DATABASE`;
 -- --------------------------------------------------------
 
 --
--- Stand-in structure for view `Accounts`
+-- Stand-in structure for view `accounts`
 -- (See below for the actual view)
 --
-CREATE TABLE `Accounts` (
+CREATE TABLE `accounts` (
 `facultyID` int
 ,`status` bit(1)
 ,`totalAwarded` decimal(35,2)
@@ -91,17 +91,20 @@ CREATE TABLE `Grants` (
   `grantID` int NOT NULL,
   `grantName` text NOT NULL,
   `grantAmount` decimal(13,2) NOT NULL,
-  `facultyID` int NOT NULL
+  `facultyID` int NOT NULL,
+  `sponsorID` int NOT NULL,
+  `status` bit(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `Grants`
 --
 
-INSERT INTO `Grants` (`grantID`, `grantName`, `grantAmount`, `facultyID`) VALUES
-(1, 'National Grant for Chips Research', '1000.00', 1),
-(2, 'National Grant for Vegetables Research', '2000.00', 5),
-(3, 'Additional Grant for Chips Research', '500.00', 1);
+INSERT INTO `Grants` (`grantID`, `grantName`, `grantAmount`, `facultyID`, `sponsorID`, `status`) VALUES
+(1, 'National Grant for Chips Research', '1000.00', 2, 1, b'0'),
+(2, 'National Grant for Vegetables Research', '2000.00', 5, 1, b'0'),
+(3, 'Additional Grant for Chips Research', '500.00', 2, 1, b'1'),
+(4, 'Additional Grant for Salsa Research', '100.00', 2, 1, b'1');
 
 -- --------------------------------------------------------
 
@@ -114,18 +117,16 @@ CREATE TABLE `Projects` (
   `projectTitle` text NOT NULL,
   `projectStartDate` date NOT NULL,
   `projectEndDate` date NOT NULL,
-  `status` bit(1) NOT NULL,
-  `facultyID` int NOT NULL,
-  `sponsorID` int NOT NULL
+  `facultyID` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `Projects`
 --
 
-INSERT INTO `Projects` (`projectID`, `projectTitle`, `projectStartDate`, `projectEndDate`, `status`, `facultyID`, `sponsorID`) VALUES
-(1, 'Theory of Nachos', '2021-11-01', '2031-11-01', b'1', 1, 1),
-(2, 'Theory of Salad', '2021-11-01', '2031-11-01', b'1', 5, 1);
+INSERT INTO `Projects` (`projectID`, `projectTitle`, `projectStartDate`, `projectEndDate`, `facultyID`) VALUES
+(1, 'Theory of Nachos', '2021-11-01', '2031-11-01', 2),
+(2, 'Theory of Salad', '2021-11-01', '2031-11-01', 5);
 
 -- --------------------------------------------------------
 
@@ -164,7 +165,7 @@ CREATE TABLE `Transactions` (
 --
 
 INSERT INTO `Transactions` (`transactionID`, `date`, `transactionAmount`, `facultyID`) VALUES
-(1, '2021-11-03', '200.00', 1),
+(1, '2021-11-03', '200.00', 2),
 (2, '2021-11-10', '800.00', 5);
 
 -- --------------------------------------------------------
@@ -187,18 +188,18 @@ CREATE TABLE `Users` (
 INSERT INTO `Users` (`userID`, `roleID`, `username`, `password`) VALUES
 (1, '1', 'admin', 'test'),
 (2, '2', 'chair', 'test'),
-(3, '3', 'researcher', 'test'),
+(3, '3', 're', 'test'),
 (4, '4', 'worker', 'test'),
-(18, '3', 'researcher2', 'test');
+(18, '3', 're2', 'test');
 
 -- --------------------------------------------------------
 
 --
--- Structure for view `Accounts`
+-- Structure for view `accounts`
 --
-DROP TABLE IF EXISTS `Accounts`;
+DROP TABLE IF EXISTS `accounts`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `accounts`  AS SELECT `g`.`facultyID` AS `facultyID`, `p`.`status` AS `status`, sum(`g`.`grantAmount`) AS `totalAwarded`, (sum(`g`.`grantAmount`) - (sum(`t`.`transactionAmount`) / 2)) AS `totalRemaining` FROM (`grants` `g` join (`transactions` `t` join `projects` `p`) on(((`p`.`facultyID` = `g`.`facultyID`) and (`g`.`facultyID` = `t`.`facultyID`)))) GROUP BY `g`.`facultyID` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `accounts`  AS SELECT `g`.`facultyID` AS `facultyID`, `g`.`status` AS `status`, sum(`g`.`grantAmount`) AS `totalAwarded`, (sum(`g`.`grantAmount`) - (sum(`t`.`transactionAmount`) / count(`g`.`grantAmount`))) AS `totalRemaining` FROM (`grants` `g` join (`transactions` `t` join `projects` `p`) on(((`p`.`facultyID` = `g`.`facultyID`) and (`g`.`facultyID` = `t`.`facultyID`) and (`g`.`status` = 1)))) GROUP BY `g`.`facultyID`, `g`.`status` ;
 
 --
 -- Indexes for dumped tables
@@ -223,15 +224,15 @@ ALTER TABLE `Faculty`
 --
 ALTER TABLE `Grants`
   ADD PRIMARY KEY (`grantID`),
-  ADD KEY `fk_grantsfaculty` (`facultyID`);
+  ADD KEY `fk_grantsfaculty` (`facultyID`),
+  ADD KEY `fk_grantsponsor` (`sponsorID`);
 
 --
 -- Indexes for table `Projects`
 --
 ALTER TABLE `Projects`
   ADD PRIMARY KEY (`projectID`),
-  ADD KEY `FK_projectfaculty` (`facultyID`),
-  ADD KEY `FK_projectsponsors` (`sponsorID`);
+  ADD KEY `FK_projectfaculty` (`facultyID`);
 
 --
 -- Indexes for table `Sponsors`
@@ -272,7 +273,7 @@ ALTER TABLE `Faculty`
 -- AUTO_INCREMENT for table `Grants`
 --
 ALTER TABLE `Grants`
-  MODIFY `grantID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `grantID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `Projects`
@@ -313,14 +314,14 @@ ALTER TABLE `Faculty`
 -- Constraints for table `Grants`
 --
 ALTER TABLE `Grants`
-  ADD CONSTRAINT `fk_grantsfaculty` FOREIGN KEY (`facultyID`) REFERENCES `Faculty` (`facultyID`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_grantsfaculty` FOREIGN KEY (`facultyID`) REFERENCES `Faculty` (`facultyID`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_grantsponsor` FOREIGN KEY (`sponsorID`) REFERENCES `Sponsors` (`sponsorID`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Projects`
 --
 ALTER TABLE `Projects`
-  ADD CONSTRAINT `FK_projectfaculty` FOREIGN KEY (`facultyID`) REFERENCES `Faculty` (`facultyID`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `FK_projectsponsors` FOREIGN KEY (`sponsorID`) REFERENCES `Sponsors` (`sponsorID`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_projectfaculty` FOREIGN KEY (`facultyID`) REFERENCES `Faculty` (`facultyID`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `Transactions`
