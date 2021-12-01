@@ -11,19 +11,40 @@
             <p>View list of all sponsored projects where user is PI</p>
             <h3> Sponsored Projects List </h3>
             <ul>
-                <li>Project A</li>
-                <li>Project B</li>
-                <li>Project C</li>
-                <li>Project D</li>
-                <li>Project E</li>
+                <li v-for="p in projects" :key="p.projectTitle">{{p.projectTitle}} has a start of {{p.projectStartDate.replace("T00:00:00.000Z"," ")}} and a end of {{p.projectEndDate.replace("T00:00:00.000Z"," ")}}</li>
             </ul>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
     name: "AllSponsoredProjects",
+    computed: {
+    ...mapGetters({
+facultyID: "getFac",
+  })},
+    data: () => ({
+        projects: ""
+    }),
+        async mounted(){
+            const config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      }};
+           let params = new URLSearchParams();
+           console.log(this.facultyID)
+    params.append("facultyID", this.facultyID);
+    params.append("operation", "allSponsoredProjects");
+    await axios.post(
+      "http://localhost:3000/fac",
+      params,
+      config
+    ).then(result => {
+        this.projects = result.data;
+    })}
 }
 </script>
 
@@ -43,7 +64,7 @@ export default {
     list-style-type: none;
     padding: 0;
     border: 1px solid green;
-    width:40%;
+    width:70%;
     margin-top:0px;
     }
     ul li {

@@ -14,7 +14,7 @@
                         <p>View Transactions made by the Researcher</p>
                     </td>
                 </tr>
-                <tr v-for="t in facultyObj" :key="t.transactionID">{{t.date}}-> ${{t.transactionAmount}} was paid to {{t.merchant}}<td>         
+                <tr v-for="t in facultyObj" :key="t.transactionID">{{t.date.replace("T00:00:00.000Z"," ")}}-> ${{t.transactionAmount}} was paid to {{t.merchant}}<td>         
                 </td>
                     </tr>
             </table>

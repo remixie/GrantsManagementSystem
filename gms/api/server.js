@@ -182,7 +182,7 @@ app.post("/chair",(req,res) => {
 
     if(operation == 'remainingFacultyFunds'){
       let facultyID = req.body.facultyID;
-      let sql = `select a.totalRemaining, t.merchant, t.date, t.transactionAmount from Accounts a join Projects p join Faculty f join Transactions t on p.facultyID = a.facultyID and f.facultyID = p.facultyID and t.facultyID = f.facultyID where f.facultyID = ?`
+      let sql = `select distinct a.totalRemaining, t.merchant, t.date, t.transactionAmount, t.transactionID from Accounts a join Projects p join Faculty f join Transactions t on p.facultyID = a.facultyID and f.facultyID = p.facultyID and t.facultyID = f.facultyID where f.facultyID = ?`
 
     db.query(sql,[facultyID], (err, result) => {
       if (err) {
@@ -208,6 +208,23 @@ app.post("/fac",(req,res) => {
         throw err;
       }
       if(result.length > 0) {
+        res.send(result)
+      }
+      
+    });
+    }
+
+    if(operation == "allSponsoredProjects"){
+      let facultyID = req.body.facultyID;
+      console.log(facultyID)
+      let sql = `select projectTitle, projectStartDate, projectEndDate from Projects where facultyID = ?`
+
+    db.query(sql,[facultyID], (err, result) => {
+      if (err) {
+        throw err;
+      }
+      if(result.length > 0) {
+        console.log(result)
         res.send(result)
       }
       
