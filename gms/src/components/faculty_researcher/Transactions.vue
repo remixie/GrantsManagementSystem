@@ -14,16 +14,30 @@
                         <p>View Transactions made by the Researcher</p>
                     </td>
                 </tr>
+                <tr v-for="t in facultyObj" :key="t.transactionID">{{t.date}}-> ${{t.transactionAmount}} was paid to {{t.merchant}}<td>         
+                </td>
+                    </tr>
             </table>
-            
 
         </div>
     </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-    name: "ExpendedFunds",
+    name: "Transactions",
+    computed: {
+    ...mapGetters({
+facultyID: "getFac",
+facultyObj: "getFacultyDetails"
+  })},
+    async mounted(){
+            this.$store.dispatch("faculty", {
+          facultyID: this.facultyID,
+          operation: "remainingFacultyFunds"
+        });
+    }
 }
 </script>
 

@@ -12,7 +12,7 @@ const getters ={
 
 const mutations = {
     setFacultyObj(state, payload) {
-        state.facultyObj = payload[0];
+        state.facultyObj = payload;
       },
 };
   
@@ -36,6 +36,7 @@ const actions = {
       params,
       config
     );
+    console.log(response.data)
         commit("setFacultyObj",response.data)
     }
 }

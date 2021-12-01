@@ -13,7 +13,7 @@ import CurrentSponsoredProjects from "../components/faculty_researcher/CurrentSp
 import AllAwardedGrants from "../components/faculty_researcher/AllAwardedGrants.vue";
 import AllActiveGrants from "../components/faculty_researcher/AllActiveGrants.vue";
 import AvailableFunds from "../components/faculty_researcher/AvailableFunds.vue";
-import ExpendedFunds from "../components/faculty_researcher/ExpendedFunds.vue";
+import Transactions from "../components/faculty_researcher/Transactions.vue";
 import ViewGrants from "../components/spar_worker/ViewGrants.vue";
 import ViewProjects from "../components/spar_worker/ViewProjects.vue";
 import ViewFaculties from "../components/spar_worker/ViewFaculties.vue";
@@ -97,9 +97,9 @@ const routes = [
     component: AvailableFunds
   },
   {
-    path: '/expendedFunds',
-    name: 'ExpendedFunds',
-    component: ExpendedFunds
+    path: '/transactions',
+    name: 'Transactions',
+    component: Transactions
   },
   {
     path: '/listAllGrants',

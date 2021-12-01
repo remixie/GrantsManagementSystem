@@ -16,7 +16,7 @@
         <router-link to="/allAwardedGrants">View All Awarded Grants</router-link>
         <router-link to="/allActiveGrants">View All Active Grants</router-link>
         <router-link to="/availableFunds">View Available Funds</router-link>
-        <router-link to="/expendedFunds">View Transactions</router-link>
+        <router-link to="/transactions">View Transactions</router-link>
       </div>
     </div>
   </div>
