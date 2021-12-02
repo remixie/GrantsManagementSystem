@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Nov 28, 2021 at 02:20 AM
+-- Generation Time: Dec 02, 2021 at 06:33 PM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.20
 
@@ -33,7 +33,7 @@ CREATE TABLE `accounts` (
 `facultyID` int
 ,`status` bit(1)
 ,`totalAwarded` decimal(35,2)
-,`totalRemaining` decimal(40,6)
+,`totalRemaining` decimal(36,2)
 );
 
 -- --------------------------------------------------------
@@ -102,7 +102,7 @@ CREATE TABLE `Grants` (
 
 INSERT INTO `Grants` (`grantID`, `grantName`, `grantAmount`, `facultyID`, `sponsorID`, `status`) VALUES
 (1, 'National Grant for Chips Research', '1000.00', 2, 1, b'0'),
-(2, 'National Grant for Vegetables Research', '2000.00', 5, 1, b'0'),
+(2, 'National Grant for Vegetables Research', '2000.00', 5, 1, b'1'),
 (3, 'Additional Grant for Chips Research', '500.00', 2, 1, b'1'),
 (4, 'Additional Grant for Salsa Research', '100.00', 2, 1, b'1');
 
@@ -126,7 +126,8 @@ CREATE TABLE `Projects` (
 
 INSERT INTO `Projects` (`projectID`, `projectTitle`, `projectStartDate`, `projectEndDate`, `facultyID`) VALUES
 (1, 'Theory of Nachos', '2021-11-01', '2031-11-01', 2),
-(2, 'Theory of Salad', '2021-11-01', '2031-11-01', 5);
+(2, 'Theory of Salad', '2021-11-01', '2031-11-01', 5),
+(3, 'Theory of Cheese', '2021-11-01', '2031-11-01', 2);
 
 -- --------------------------------------------------------
 
@@ -157,16 +158,18 @@ CREATE TABLE `Transactions` (
   `transactionID` int NOT NULL,
   `date` date NOT NULL,
   `transactionAmount` decimal(13,2) NOT NULL,
-  `facultyID` int NOT NULL
+  `facultyID` int NOT NULL,
+  `merchant` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `Transactions`
 --
 
-INSERT INTO `Transactions` (`transactionID`, `date`, `transactionAmount`, `facultyID`) VALUES
-(1, '2021-11-03', '200.00', 2),
-(2, '2021-11-10', '800.00', 5);
+INSERT INTO `Transactions` (`transactionID`, `date`, `transactionAmount`, `facultyID`, `merchant`) VALUES
+(1, '2021-11-03', '200.00', 2, 'Wikipedia'),
+(2, '2021-11-10', '800.00', 5, 'SCSU Bookstore'),
+(3, '2021-11-03', '100.00', 2, 'Nacho Digest');
 
 -- --------------------------------------------------------
 
@@ -199,7 +202,7 @@ INSERT INTO `Users` (`userID`, `roleID`, `username`, `password`) VALUES
 --
 DROP TABLE IF EXISTS `accounts`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `accounts`  AS SELECT `g`.`facultyID` AS `facultyID`, `g`.`status` AS `status`, sum(`g`.`grantAmount`) AS `totalAwarded`, (sum(`g`.`grantAmount`) - (sum(`t`.`transactionAmount`) / count(`g`.`grantAmount`))) AS `totalRemaining` FROM (`grants` `g` join (`transactions` `t` join `projects` `p`) on(((`p`.`facultyID` = `g`.`facultyID`) and (`g`.`facultyID` = `t`.`facultyID`) and (`g`.`status` = 1)))) GROUP BY `g`.`facultyID`, `g`.`status` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `accounts`  AS SELECT `g`.`facultyID` AS `facultyID`, `g`.`status` AS `status`, sum(`g`.`grantAmount`) AS `totalAwarded`, (sum(`g`.`grantAmount`) - sum(`t`.`transactionAmount`)) AS `totalRemaining` FROM (`grants` `g` join (`transactions` `t` join `projects` `p`) on(((`p`.`facultyID` = `g`.`facultyID`) and (`g`.`facultyID` = `t`.`facultyID`) and (`g`.`status` = 1)))) GROUP BY `g`.`facultyID`, `g`.`status` ;
 
 --
 -- Indexes for dumped tables
@@ -279,7 +282,7 @@ ALTER TABLE `Grants`
 -- AUTO_INCREMENT for table `Projects`
 --
 ALTER TABLE `Projects`
-  MODIFY `projectID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `projectID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `Sponsors`
@@ -291,13 +294,13 @@ ALTER TABLE `Sponsors`
 -- AUTO_INCREMENT for table `Transactions`
 --
 ALTER TABLE `Transactions`
-  MODIFY `transactionID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `transactionID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `userID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `userID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Constraints for dumped tables
