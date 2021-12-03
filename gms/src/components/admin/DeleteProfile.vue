@@ -87,7 +87,7 @@ export default {
         border: none;
         cursor: pointer;
         font-size: 15px;
-        width:42%;
+        width:50%;
   }
   .centered{
     text-align: left;
