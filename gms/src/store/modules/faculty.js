@@ -36,8 +36,7 @@ const actions = {
       params,
       config
     );
-    console.log(response.data)
-        commit("setFacultyObj",response.data)
+        commit("setFacultyObj",response.data[0])
     }
 }
 

@@ -8,7 +8,7 @@
             <h2>View Total Active Grant Funding for a Faculty</h2>
         </div>
         <div class="centered">
-            <table v-if="facultyObj.length <= 0">
+            <table v-if="facultyObj.length <= 1">
                 <tr>
                 <td colspan=2>
                     <p>Please select a faculty to view total amount of active grant funding received by that faculty</p>
@@ -21,7 +21,7 @@
                 <td>
                     <select name="facultyName" v-model="selectedFaculty" class="dropdown">
                     <option disabled selected value> -- Select Faculty -- </option>
-                    <option v-for="faculty in allFaculty" :key="faculty.facultyID" :value="faculty.facultyID">{{faculty.firstName}} {{faculty.lastName}}</option>
+                    <option v-for="faculty in allFaculty" :key="faculty.projectTitle" :value="faculty.facultyID">{{faculty.firstName}} {{faculty.lastName}}</option>
                     </select>
                 </td>
                 </tr>

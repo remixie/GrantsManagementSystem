@@ -139,7 +139,7 @@ app.post("/chair",(req,res) => {
 
     if(operation == 'allFaculty'){
       let deptID = req.body.deptID;
-      let sql = `select f.firstName, f.lastName, f.facultyID from Faculty f join Projects p where f.facultyID = p.facultyID and f.deptID = ?`
+      let sql = `select distinct f.firstName, f.lastName, f.facultyID from Faculty f join Grants g on g.facultyID = f.facultyID and f.deptID = ?`
 
     db.query(sql,[deptID], (err, result) => {
       if (err) {
