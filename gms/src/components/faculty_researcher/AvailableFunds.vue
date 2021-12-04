@@ -9,7 +9,7 @@
         </div>
         <div class="centered">
 
-            <div>You have an available balance of ${{facultyObj[0].totalRemaining}}</div>
+            <div>You have an available balance of ${{facultyObj.totalRemaining}}</div>
         
         </div>
     </div>

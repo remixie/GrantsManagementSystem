@@ -180,9 +180,9 @@ app.post("/chair",(req,res) => {
     });
     }
 
-    if(operation == 'remainingFacultyFunds'){
+    if(operation == 'transactions'){
       let facultyID = req.body.facultyID;
-      let sql = `select distinct a.totalRemaining, t.merchant, t.date, t.transactionAmount, t.transactionID from Accounts a join Projects p join Faculty f join Transactions t on p.facultyID = a.facultyID and f.facultyID = p.facultyID and t.facultyID = f.facultyID where f.facultyID = ?`
+      let sql = `select distinct t.date,t.transactionAmount, t.merchant from transactions t join grants g on g.facultyID = t.facultyID where g.status = 1 and t.facultyID = ?`
 
     db.query(sql,[facultyID], (err, result) => {
       if (err) {
@@ -194,6 +194,23 @@ app.post("/chair",(req,res) => {
       
     });
     }
+
+    if(operation == 'remainingFacultyFunds'){
+      let facultyID = req.body.facultyID;
+      let sql = `select a.totalRemaining from accounts a where a.facultyID = ?`
+
+    db.query(sql,[facultyID], (err, result) => {
+      if (err) {
+        throw err;
+      }
+      if(result.length > 0) {
+        console.log(result)
+        res.send(Object.values(JSON.parse(JSON.stringify(result))))
+      }
+      
+    });
+    }
+
 });
 
 
