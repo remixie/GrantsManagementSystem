@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Dec 02, 2021 at 06:33 PM
+-- Generation Time: Dec 04, 2021 at 03:15 AM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.20
 
@@ -202,7 +202,7 @@ INSERT INTO `Users` (`userID`, `roleID`, `username`, `password`) VALUES
 --
 DROP TABLE IF EXISTS `accounts`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `accounts`  AS SELECT `g`.`facultyID` AS `facultyID`, `g`.`status` AS `status`, sum(`g`.`grantAmount`) AS `totalAwarded`, (sum(`g`.`grantAmount`) - sum(`t`.`transactionAmount`)) AS `totalRemaining` FROM (`grants` `g` join (`transactions` `t` join `projects` `p`) on(((`p`.`facultyID` = `g`.`facultyID`) and (`g`.`facultyID` = `t`.`facultyID`) and (`g`.`status` = 1)))) GROUP BY `g`.`facultyID`, `g`.`status` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `accounts`  AS SELECT `g`.`facultyID` AS `facultyID`, `g`.`status` AS `status`, sum(`g`.`grantAmount`) AS `totalAwarded`, (sum(`g`.`grantAmount`) - (select sum(`t`.`transactionAmount`) from `transactions` `t` where (`t`.`facultyID` = `g`.`facultyID`))) AS `totalRemaining` FROM `grants` AS `g` WHERE (`g`.`status` = 1) GROUP BY `g`.`facultyID`, `g`.`status` ;
 
 --
 -- Indexes for dumped tables
